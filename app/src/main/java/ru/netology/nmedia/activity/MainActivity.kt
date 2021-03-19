@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.netology.nmedia.R
-import ru.netology.nmedia.WallService
+import ru.netology.nmedia.dto.WallService
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.viewModel.PostViewModel
 

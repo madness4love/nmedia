@@ -7,4 +7,9 @@
     <string name="likes" translatable="false">"10"</string>
     <string name="shared" translatable="false">"10"</string>
     <string name="watched" translatable="false">"10"</string>
+    <string name="post_text">Post text</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_remove">Remove</string>
+    <string name="error_empty_content">Post can\'t pe empty</string>
+    <string name="edit_action">Edit post</string>
 </resources>

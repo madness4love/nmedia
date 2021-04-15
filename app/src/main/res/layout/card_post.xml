@@ -83,15 +83,14 @@
         app:constraint_referenced_ids="content"
         app:barrierDirection="bottom" />
 
-    <ImageButton
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/imgbLiked"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_like_24"/>
+        android:button="@drawable/ic_like_24dp"/>
 
     <TextView
         android:id="@+id/txtLiked"

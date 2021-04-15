@@ -46,9 +46,7 @@ class PostViewHolder(
             txtLiked.text = WallService.displayCount(post.likes)
             txtShare.text = WallService.displayCount(post.shares)
             txtWatch.text = WallService.displayCount(post.watches)
-            imgbLiked.setImageResource(
-                if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
-            )
+            imgbLiked.isChecked = post.likedByMe
 
             imgbShare.setImageResource(
                 if (post.sharedByMe) R.drawable.ic_shared_24 else R.drawable.ic_baseline_share_24

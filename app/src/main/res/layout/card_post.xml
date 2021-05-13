@@ -46,15 +46,16 @@
         android:layout_marginBottom="@dimen/common_spacing"
         tools:text="@sample/posts.json/data/published" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_spacing"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+        style="@style/Widget.AppTheme.Menu"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/header"
@@ -83,70 +84,45 @@
         app:constraint_referenced_ids="content"
         app:barrierDirection="bottom" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/imgbLiked"
+        style="@style/Widget.AppTheme.LikeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:checkable="true"
+        app:icon="@drawable/ic_like_selector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:button="@drawable/ic_like_24dp"/>
+        tools:text="@sample/posts.json/data/likes" />
 
-    <TextView
-        android:id="@+id/txtLiked"
-        app:layout_constraintStart_toEndOf="@+id/imgbLiked"
-        app:layout_constraintBottom_toBottomOf="@+id/imgbLiked"
-        app:layout_constraintTop_toTopOf="@+id/imgbLiked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        tools:text="@string/likes" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/imgbShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginLeft="@dimen/common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/txtLiked"
-        app:layout_constraintStart_toEndOf="@+id/txtLiked"
+        android:checkable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/imgbLiked"
+        app:layout_constraintStart_toEndOf="@+id/imgbLiked"
         app:layout_constraintTop_toBottomOf="@+id/editTools"
-        app:srcCompat="@drawable/ic_baseline_share_24"
+        app:icon="@drawable/ic_baseline_share_24"
+        style="@style/Widget.AppTheme.ShareCheckBox"
+        tools:text="10"
         android:contentDescription="TODO"/>
 
-    <TextView
-        android:id="@+id/txtShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgbShare"
-        app:layout_constraintStart_toEndOf="@+id/imgbShare"
-        app:layout_constraintTop_toTopOf="@+id/imgbShare"
-        tools:text="@string/shared" />
 
-    <TextView
-        android:id="@+id/txtWatch"
-        app:layout_constraintBottom_toBottomOf="@+id/imgbWatch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgbWatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="@string/watched" />
-
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/imgbWatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:background="@android:color/transparent"
+        android:checkable="true"
+        style="@style/Widget.AppTheme.WatchCheckBox"
         app:layout_constraintBottom_toBottomOf="@+id/imgbShare"
-        app:layout_constraintEnd_toStartOf="@+id/txtWatch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imgbShare"
-        app:srcCompat="@drawable/ic_baseline_remove_red_eye_24" />
+        tools:text="10"
+        app:icon="@drawable/ic_baseline_remove_red_eye_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

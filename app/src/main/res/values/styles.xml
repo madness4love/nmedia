@@ -31,5 +31,9 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="Widget.AppCompat.FloatingButtons" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="buttonTint">@color/colorAccent</item>
+    </style>
+
 
 </resources>

@@ -21,31 +21,33 @@ class EditPostActivity : AppCompatActivity() {
      //   val viewModel: PostViewModel by viewModels()
 
 
-        binding.editText.requestFocus()
-        val text = intent.getStringExtra("post text")
-        binding.editText.setText(text)
-
-        binding.ok.setOnClickListener{
-            val intent = Intent()
-            if (binding.editText.text.isNullOrBlank()) {
-                setResult(Activity.RESULT_CANCELED, intent)
-            } else {
-                val content = binding.editText.text.toString()
-                intent.putExtra(Intent.EXTRA_TEXT, content)
-                setResult(Activity.RESULT_OK, intent)
-            }
-
-            finish()
-
+        with(binding.editText) {
+            requestFocus()
+            val text = intent.getStringExtra("post text input")
+            setText(text)
         }
 
-        binding.cancelButton.setOnClickListener{
-            val intent = Intent()
-            setResult(Activity.RESULT_CANCELED, intent)
-            finish()
+            binding.ok.setOnClickListener{
+                val intent = Intent()
+                if (binding.editText.text.isNullOrBlank()) {
+                    setResult(Activity.RESULT_CANCELED, intent)
+                } else {
+                    val content = binding.editText.text.toString()
+                    intent.putExtra("post text output", content)
+                    setResult(Activity.RESULT_OK, intent)
+                }
+
+                finish()
+
+            }
+
+            binding.cancelButton.setOnClickListener{
+                val intent = Intent()
+                setResult(Activity.RESULT_CANCELED, intent)
+                finish()
+            }
         }
 
 
 
     }
-}

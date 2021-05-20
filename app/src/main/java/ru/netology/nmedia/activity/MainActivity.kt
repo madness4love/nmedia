@@ -1,11 +1,8 @@
 package ru.netology.nmedia.activity
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,10 +11,8 @@ import kotlinx.android.synthetic.main.card_post.view.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
-import ru.netology.nmedia.dto.WallService
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.viewModel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +23,12 @@ class MainActivity : AppCompatActivity() {
 
 
         val viewModel: PostViewModel by viewModels()
+        val editPostLauncher = registerForActivityResult(EditPostResultContract()) { result ->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+
         val adapter = PostAdapter(object : OnInteractionListener{
             override fun onLike(post: Post) {
                 viewModel.likeById(post.id)
@@ -49,19 +50,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onEdit(post: Post) {
-//                val intent = Intent(this@MainActivity, EditPostActivity::class.java)
-//                intent.putExtra("post text", post.content)
-//                startActivity(intent)
-
-                val editPostLauncher = registerForActivityResult(EditPostResultContract()) { result ->
-                    result ?: return@registerForActivityResult
-                    viewModel.changeContent(result)
-                    viewModel.save()
-                }
-
+                viewModel.edit(post)
                 editPostLauncher.launch(post.content)
-
-               // viewModel.edit(post)
             }
 
             override fun onRemove(post: Post) {
@@ -87,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             if (post.id == 0L) {
                 return@observe
             }
+
+
 
         }
 

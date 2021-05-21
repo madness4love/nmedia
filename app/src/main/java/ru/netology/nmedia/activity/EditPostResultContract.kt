@@ -3,6 +3,7 @@ package ru.netology.nmedia.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 
 class EditPostResultContract : ActivityResultContract<String, String?>() {

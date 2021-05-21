@@ -3,10 +3,12 @@ package ru.netology.nmedia.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.new_post_activity.view.*
+import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.EditPostActivityBinding
 import ru.netology.nmedia.viewModel.PostViewModel
 
@@ -30,6 +32,11 @@ class EditPostActivity : AppCompatActivity() {
             binding.ok.setOnClickListener{
                 val intent = Intent()
                 if (binding.editText.text.isNullOrBlank()) {
+                    Toast.makeText(
+                    this,
+                    this.getString(R.string.error_empty_content),
+                    Toast.LENGTH_SHORT)
+                    .show()
                     setResult(Activity.RESULT_CANCELED, intent)
                 } else {
                     val content = binding.editText.text.toString()

@@ -3,6 +3,7 @@ package ru.netology.nmedia.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import kotlinx.android.synthetic.main.activity_main.*
@@ -77,9 +78,6 @@ class MainActivity : AppCompatActivity() {
             if (post.id == 0L) {
                 return@observe
             }
-
-
-
         }
 
         binding.addPost.setOnClickListener{

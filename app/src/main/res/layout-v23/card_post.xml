@@ -137,28 +137,16 @@
         tools:text="10"
         app:icon="@drawable/ic_baseline_remove_red_eye_24" />
 
-    <FrameLayout
-        android:id="@+id/videoLayout"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:visibility="gone"
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="@android:drawable/ic_media_play"
         app:layout_constraintBottom_toTopOf="@id/likeShareButtons"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoTools">
+        app:layout_constraintTop_toBottomOf="@+id/videoTools"
+        tools:visibility="gone"
+        android:focusable="true" />
 
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="visible" />
-
-        <ImageView
-            style="@style/Widget.AppCompat.FloatingButtons"
-            android:layout_width="@dimen/posts_avatar_size"
-            android:layout_height="@dimen/posts_avatar_size"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
-    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

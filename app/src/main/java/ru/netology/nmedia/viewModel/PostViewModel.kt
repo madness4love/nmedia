@@ -11,6 +11,7 @@ private val empty = Post(
     content = "",
     author = "",
     published = ""
+
 )
 
 class PostViewModel : ViewModel() {

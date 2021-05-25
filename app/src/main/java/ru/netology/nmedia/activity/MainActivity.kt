@@ -1,6 +1,9 @@
 package ru.netology.nmedia.activity
 
+import android.app.Activity
+import android.app.Notification
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -59,6 +62,13 @@ class MainActivity : AppCompatActivity() {
                 viewModel.removeById(post.id)
             }
 
+            override fun onPlayVideo(post: Post) {
+                if (post.videoUrl.isNullOrBlank()) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    startActivity(intent)
+                }
+            }
+
         })
 
         binding.list.adapter = adapter
@@ -83,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         binding.addPost.setOnClickListener{
             newPostLauncher.launch()
         }
+
 
     }
 }

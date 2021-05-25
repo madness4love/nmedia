@@ -1,11 +1,14 @@
 package ru.netology.nmedia.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.card_post.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
@@ -17,11 +20,12 @@ interface OnInteractionListener {
     fun onWatch(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
+    fun onPlayVideo(post: Post) {}
 }
 
 class PostAdapter (
     private val onInteractionListener: OnInteractionListener
-) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
+) : ListAdapter<Post, PostViewHolder>(PostViewHolder.PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostViewHolder(binding, onInteractionListener)
@@ -38,7 +42,7 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(post : Post) {
+    fun bind(post: Post) {
         binding.apply {
             author.text = post.author
             published.text = post.published
@@ -47,8 +51,18 @@ class PostViewHolder(
             imgbShare.text = WallService.displayCount(post.shares)
             imgbWatch.text = WallService.displayCount(post.watches)
             imgbLiked.isChecked = post.likedByMe
-
             imgbShare.isChecked = post.sharedByMe
+
+            if (post.videoUrl.isNullOrBlank()) {
+                videoView.setVideoURI(Uri.parse(post.videoUrl))
+                videoLayout!!.visibility = View.VISIBLE
+                videoView.requestFocus()
+            }
+
+            videoView.setOnClickListener {
+                onInteractionListener.onPlayVideo(post)
+            }
+
 
             imgbLiked.setOnClickListener {
                 onInteractionListener.onLike(post)
@@ -64,7 +78,7 @@ class PostViewHolder(
 
 
 
-            menu.setOnClickListener{
+            menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
                     setOnMenuItemClickListener { item ->
@@ -86,21 +100,20 @@ class PostViewHolder(
             }
 
 
-            }
-
         }
+
     }
 
 
+    class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem == newItem
+        }
+
     }
-
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem == newItem
-    }
-
 }
 

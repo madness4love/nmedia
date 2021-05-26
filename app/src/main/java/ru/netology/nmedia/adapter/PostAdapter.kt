@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -53,56 +54,58 @@ class PostViewHolder(
             imgbLiked.isChecked = post.likedByMe
             imgbShare.isChecked = post.sharedByMe
 
-            if (post.videoUrl.isNullOrBlank()) {
-                videoView.setVideoURI(Uri.parse(post.videoUrl))
-                videoLayout!!.visibility = View.VISIBLE
-                videoView.requestFocus()
+            videoView.apply {
+                //if (post.videoUrl.isNullOrBlank()) {
+                 (Uri.parse("https://www.youtube.com/watch?v=WhWc3b3KhnY"))
+                //videoView.visibility = View.VISIBLE
+                requestFocus()
             }
+                //}
 
-            videoView.setOnClickListener {
-                onInteractionListener.onPlayVideo(post)
-            }
-
-
-            imgbLiked.setOnClickListener {
-                onInteractionListener.onLike(post)
-            }
-
-            imgbShare.setOnClickListener {
-                onInteractionListener.onShare(post)
-            }
-
-            imgbWatch.setOnClickListener {
-                onInteractionListener.onWatch(post)
-            }
+                videoView.setOnClickListener {
+                    onInteractionListener.onPlayVideo(post)
+                }
 
 
+                imgbLiked.setOnClickListener {
+                    onInteractionListener.onLike(post)
+                }
 
-            menu.setOnClickListener {
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.options_post)
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(post)
-                                true
+                imgbShare.setOnClickListener {
+                    onInteractionListener.onShare(post)
+                }
+
+                imgbWatch.setOnClickListener {
+                    onInteractionListener.onWatch(post)
+                }
+
+
+
+                menu.setOnClickListener {
+                    PopupMenu(it.context, it).apply {
+                        inflate(R.menu.options_post)
+                        setOnMenuItemClickListener { item ->
+                            when (item.itemId) {
+                                R.id.remove -> {
+                                    onInteractionListener.onRemove(post)
+                                    true
+                                }
+
+                                R.id.edit -> {
+                                    onInteractionListener.onEdit(post)
+                                    true
+                                }
+
+                                else -> false
                             }
-
-                            R.id.edit -> {
-                                onInteractionListener.onEdit(post)
-                                true
-                            }
-
-                            else -> false
                         }
-                    }
-                }.show()
+                    }.show()
+                }
             }
 
 
         }
 
-    }
 
 
     class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

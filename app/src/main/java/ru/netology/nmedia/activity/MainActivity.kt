@@ -63,10 +63,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPlayVideo(post: Post) {
-                if (post.videoUrl.isNullOrBlank()) {
-                    val intent = Intent(Intent.ACTION_VIEW)
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                     startActivity(intent)
-                }
             }
 
         })

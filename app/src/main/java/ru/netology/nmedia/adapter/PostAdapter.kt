@@ -54,15 +54,19 @@ class PostViewHolder(
             imgbLiked.isChecked = post.likedByMe
             imgbShare.isChecked = post.sharedByMe
 
-            videoView.apply {
-                //if (post.videoUrl.isNullOrBlank()) {
-                 (Uri.parse("https://www.youtube.com/watch?v=WhWc3b3KhnY"))
-                //videoView.visibility = View.VISIBLE
-                requestFocus()
-            }
-                //}
+            if (post.videoUrl != null) {
+                videoLayout.visibility = View.VISIBLE
 
-                videoView.setOnClickListener {
+                videoView.apply {
+                    setVideoURI(Uri.parse(post.videoUrl))
+                    requestFocus()
+                    start()
+                }
+                } else {
+                    videoLayout.visibility = View.GONE
+                }
+
+                videoLayout.setOnClickListener {
                     onInteractionListener.onPlayVideo(post)
                 }
 

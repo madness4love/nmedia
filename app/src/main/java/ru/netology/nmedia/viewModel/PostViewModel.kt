@@ -1,9 +1,12 @@
 package ru.netology.nmedia.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.repository.PostRepository
+import ru.netology.nmedia.repository.PostRepositoryInFileImpl
 import ru.netology.nmedia.repository.PostRepositoryInMemoryImpl
 
 private val empty = Post(
@@ -14,8 +17,8 @@ private val empty = Post(
 
 )
 
-class PostViewModel : ViewModel() {
-    private val repository : PostRepository = PostRepositoryInMemoryImpl()
+class PostViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository : PostRepository = PostRepositoryInFileImpl(application)
     val data = repository.getAll()
     val edited = MutableLiveData(empty)
     fun likeById(id : Long) = repository.likeById(id)

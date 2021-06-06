@@ -11,9 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.NewPostActivity" />
-        <activity android:name=".activity.EditPostActivity" />
-        <activity android:name=".activity.MainActivity">
+
+        <activity android:name=".activity.AppActivity">
+            <nav-graph android:value="@navigation/nav_main"/>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

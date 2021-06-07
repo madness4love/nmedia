@@ -52,7 +52,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun onEdit(post: Post) {
-//                viewModel.edit(post)
+                viewModel.edit(post)
                 val text = post.content
                 val bundle = Bundle()
                 bundle.putString("editedText", text)

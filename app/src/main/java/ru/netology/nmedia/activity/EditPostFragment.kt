@@ -35,6 +35,7 @@ class EditPostFragment : Fragment() {
         arguments?.edit?.let(binding.editText::setText)
         binding.editText.setText(arguments?.getString("editedText"))
 
+
         binding.ok.setOnClickListener {
             if (binding.editText.text.isNullOrBlank()) {
                 Toast.makeText(

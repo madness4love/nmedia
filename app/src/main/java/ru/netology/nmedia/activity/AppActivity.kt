@@ -20,6 +20,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             val text = it.getStringExtra(Intent.EXTRA_TEXT)
             if (text?.isNotBlank() != true) {
                 return@let
+
             }
 
             intent.removeExtra(Intent.EXTRA_TEXT)
@@ -30,12 +31,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 }
             )
 
-//            findNavController(R.id.nav_host_fragment_container).navigate(
-//                R.id.action_feedFragment_to_editPostFragment,
-//                Bundle().apply {
-//                    edit = text
-//                }
-//            )
+            findNavController(R.id.nav_host_fragment_container).navigate(
+                R.id.action_feedFragment_to_editPostFragment,
+                Bundle().apply {
+                    edit = text
+                }
+            )
         }
     }
 }

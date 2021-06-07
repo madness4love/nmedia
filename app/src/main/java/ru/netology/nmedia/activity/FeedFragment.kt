@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import androidx.activity.result.launch
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,10 +53,10 @@ class FeedFragment : Fragment() {
 
             override fun onEdit(post: Post) {
 //                viewModel.edit(post)
-//                val text = post.content
-//                val bundle = Bundle()
-//                bundle.putString("editedText", text)
-//                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment)//, bundle)
+                val text = post.content
+                val bundle = Bundle()
+                bundle.putString("editedText", text)
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment, bundle)
             }
 
             override fun onRemove(post: Post) {

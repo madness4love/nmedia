@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -55,6 +56,8 @@ dependencies {
     def gson_version = "2.8.6"
     def nav_version = "2.3.4"
     def room_version = "2.2.6"
+    def firebase_version = "28.1.0"
+    def play_services_base_version = "17.6.0"
 
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -72,6 +75,9 @@ dependencies {
     implementation"androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation"androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.room:room-runtime:$room_version"
+    implementation platform("com.google.firebase:firebase-bom:$firebase_version")
+    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     kapt "androidx.room:room-compiler:$room_version"
 

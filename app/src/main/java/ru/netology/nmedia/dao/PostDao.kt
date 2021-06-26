@@ -1,4 +1,4 @@
-git package ru.netology.nmedia.dao
+package ru.netology.nmedia.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -13,8 +13,10 @@
     <string name="error_empty_content">Post can\'t be empty</string>
     <string name="edit_action">Edit post</string>
     <string name="chooser_share_post">Share post</string>
-    <string name="channel_remote_name" translatable="false">Server notifications</string>
-    <string name="channel_remote_description" translatable="false">Notifications from remote server</string>
+    <string name="channel_like_name" translatable="false">Like notifications</string>
+    <string name="channel_newPost_name" translatable="false">New post notifications</string>
+    <string name="channel_like_description" translatable="false">Notifications like</string>
+    <string name="channel_new_post_description" translatable="false">Notifications new post</string>
     <string name="notification_user_liked" translatable="false">User %1$s liked %2$s\'s post</string>
     <string name="notification_user_new_post" translatable="false">User %1$s create new post</string>
 </resources>

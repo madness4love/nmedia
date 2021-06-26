@@ -8,12 +8,10 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.google.android.youtube.player.internal.g
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.netology.nmedia.R
-import ru.netology.nmedia.dto.Post
 import kotlin.random.Random
 
 
@@ -47,14 +45,16 @@ class FCMService : FirebaseMessagingService() {
 
     private fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_remote_name)
-            val descriptionTextLike = getString(R.string.channel_remote_description)
+            val nameLike = getString(R.string.channel_like_name)
+            val nameNewPost = getString(R.string.channel_newPost_name)
+            val descriptionTextLike = getString(R.string.channel_like_description)
+            val descriptionTextNewPost = getString(R.string.channel_new_post_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channelLike = NotificationChannel(likeChannelId, name, importance).apply {
+            val channelLike = NotificationChannel(likeChannelId, nameLike, importance).apply {
                 description = descriptionTextLike
             }
-            val channelNewPost = NotificationChannel(newPostChannelId, name, importance).apply {
-                description = descriptionTextLike
+            val channelNewPost = NotificationChannel(newPostChannelId, nameNewPost, importance).apply {
+                description = descriptionTextNewPost
             }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channelLike)
@@ -85,8 +85,14 @@ class FCMService : FirebaseMessagingService() {
             .setContentTitle(
                 getString(
                 R.string.notification_user_new_post,
-                content.userName,
-            ))
+                content.userName
+                )
+            )
+            .setContentText(content.postContent)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(content.postContent)
+                .setSummaryText(content.postContent)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
@@ -113,5 +119,5 @@ data class NewPost(
     val userId: Long,
     val userName: String,
     val postId: Long,
-    val postContent: String,
+    val postContent: String
 )

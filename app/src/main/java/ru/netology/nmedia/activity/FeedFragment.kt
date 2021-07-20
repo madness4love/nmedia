@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_feed.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
@@ -63,11 +64,6 @@ class FeedFragment : Fragment() {
                 viewModel.removeById(post.id)
             }
 
-            override fun onPlayVideo(post: Post) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
-                    startActivity(intent)
-            }
-
         })
 
         binding.list.adapter = adapter
@@ -84,6 +80,7 @@ class FeedFragment : Fragment() {
 
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadPosts()
+            swipeRefresh.isRefreshing = false
         }
 
 

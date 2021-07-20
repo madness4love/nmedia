@@ -1,17 +1,13 @@
 package ru.netology.nmedia.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.entity.PostEntity
 import java.util.concurrent.TimeUnit
 
 class PostRepositoryImpl : PostRepository {
@@ -42,8 +38,9 @@ class PostRepositoryImpl : PostRepository {
     }
 
     override fun likeById(id: Long) {
+        val post = getById(id)
         val requestLike:Request = Request.Builder()
-            .post(gson.toJson(id).toRequestBody(jsonType))
+            .post(gson.toJson(post).toRequestBody(jsonType))
             .url("${BASE_URL}/api/slow/posts/$id/likes")
             .build()
 
@@ -52,7 +49,7 @@ class PostRepositoryImpl : PostRepository {
             .url("${BASE_URL}/api/slow/posts/$id/likes")
             .build()
 
-        val request = if (getAll()[id.toInt()-1].likedByMe) requestUnlike else requestLike
+        val request = if (post.likedByMe) requestUnlike else requestLike
 
         client.newCall(request)
             .execute()
@@ -87,4 +84,18 @@ class PostRepositoryImpl : PostRepository {
             .execute()
             .close()
     }
+
+    override fun getById(id: Long): Post {
+        val request: Request = Request.Builder()
+            .url("${BASE_URL}/api/slow/posts/$id")
+            .build()
+
+        return client.newCall(request)
+            .execute()
+            .let {it.body?.string() ?: throw RuntimeException("body is null")}
+            .let {
+                gson.fromJson(it, Post::class.java)
+            }
+    }
+
 }

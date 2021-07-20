@@ -7,6 +7,7 @@ import ru.netology.nmedia.dto.Post
 interface PostRepository {
 
     fun getAll() : List<Post>
+    fun getById(id : Long) : Post
     fun likeById(id : Long)
     fun shareById(id : Long)
     fun watchById(id : Long)

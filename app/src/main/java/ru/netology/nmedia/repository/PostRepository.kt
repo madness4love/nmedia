@@ -40,6 +40,6 @@ interface PostRepository {
 
     interface RemoveByIdCallback {
         fun onError(e : Exception)
-        fun onSuccess(posts : List<Post>)
+        fun onSuccess()
     }
 }

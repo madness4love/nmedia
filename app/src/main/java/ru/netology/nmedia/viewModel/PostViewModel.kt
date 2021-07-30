@@ -17,8 +17,7 @@ private val empty = Post(
     id = 0L,
     content = "",
     author = "",
-    published = "",
-    authorAvatar = ""
+    published = ""
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {

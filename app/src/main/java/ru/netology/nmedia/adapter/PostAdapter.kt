@@ -51,8 +51,10 @@ class PostViewHolder(
             imgbLiked.text = WallService.displayCount(post.likes)
             imgbLiked.isChecked = post.likedByMe
 
+            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+
             Glide.with(binding.avatar)
-                .load("post.authorAvatar")
+                .load(url)
                 .into(binding.avatar)
 
 

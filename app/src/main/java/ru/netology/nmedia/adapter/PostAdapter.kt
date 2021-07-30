@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.card_post.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
@@ -23,7 +24,7 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
 }
 
-class PostAdapter (
+class PostAdapter(
     private val onInteractionListener: OnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostViewHolder.PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -46,17 +47,21 @@ class PostViewHolder(
         binding.apply {
             author.text = post.author
             published.text = post.published
-            avatar.setImageURI(post.authorAvatar.toUri())
             content.text = post.content
             imgbLiked.text = WallService.displayCount(post.likes)
             imgbLiked.isChecked = post.likedByMe
 
+            Glide.with(binding.avatar)
+                .load("post.authorAvatar")
+                .into(binding.avatar)
 
 
 
-                imgbLiked.setOnClickListener {
-                    onInteractionListener.onLike(post)
-                }
+
+
+            imgbLiked.setOnClickListener {
+                onInteractionListener.onLike(post)
+            }
 
             imgbShare.setOnClickListener {
                 onInteractionListener.onShare(post)
@@ -65,31 +70,30 @@ class PostViewHolder(
 
 
 
-                menu.setOnClickListener {
-                    PopupMenu(it.context, it).apply {
-                        inflate(R.menu.options_post)
-                        setOnMenuItemClickListener { item ->
-                            when (item.itemId) {
-                                R.id.remove -> {
-                                    onInteractionListener.onRemove(post)
-                                    true
-                                }
-
-                                R.id.edit -> {
-                                    onInteractionListener.onEdit(post)
-                                    true
-                                }
-
-                                else -> false
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
                             }
+
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+
+                            else -> false
                         }
-                    }.show()
-                }
+                    }
+                }.show()
             }
-
-
         }
 
+
+    }
 
 
     class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import okhttp3.OkHttpClient
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -42,6 +43,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         repository.getAllAsync(object : PostRepository.GetAllCallback {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+
             }
 
             override fun onError(e: Exception) {

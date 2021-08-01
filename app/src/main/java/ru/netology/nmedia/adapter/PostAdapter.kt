@@ -1,21 +1,18 @@
 package ru.netology.nmedia.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.MediaController
 import android.widget.PopupMenu
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.card_post.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.WallService
+import ru.netology.nmedia.utils.GlideApp
+import ru.netology.nmedia.utils.MyAppGlideModule
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -51,13 +48,14 @@ class PostViewHolder(
             imgbLiked.text = WallService.displayCount(post.likes)
             imgbLiked.isChecked = post.likedByMe
 
-            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
 
-            Glide.with(binding.avatar)
-                .load(url)
+            GlideApp.with(binding.avatar)
+                .load(urlAvatar)
+                .circleCrop()
+                .placeholder(R.drawable.ic_baseline_avatar_placeholder_24)
+                .error(R.drawable.ic_baseline_error_24)
                 .into(binding.avatar)
-
-
 
 
 

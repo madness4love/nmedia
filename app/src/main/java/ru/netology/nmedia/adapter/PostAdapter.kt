@@ -1,12 +1,8 @@
 package ru.netology.nmedia.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.MediaController
 import android.widget.PopupMenu
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +11,8 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.WallService
+import ru.netology.nmedia.utils.GlideApp
+import ru.netology.nmedia.utils.MyAppGlideModule
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -23,7 +21,7 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
 }
 
-class PostAdapter (
+class PostAdapter(
     private val onInteractionListener: OnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostViewHolder.PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -46,17 +44,24 @@ class PostViewHolder(
         binding.apply {
             author.text = post.author
             published.text = post.published
-            avatar.setImageURI(post.authorAvatar.toUri())
             content.text = post.content
             imgbLiked.text = WallService.displayCount(post.likes)
             imgbLiked.isChecked = post.likedByMe
 
+            val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+
+            GlideApp.with(binding.avatar)
+                .load(urlAvatar)
+                .circleCrop()
+                .placeholder(R.drawable.ic_baseline_avatar_placeholder_24)
+                .error(R.drawable.ic_baseline_error_24)
+                .into(binding.avatar)
 
 
 
-                imgbLiked.setOnClickListener {
-                    onInteractionListener.onLike(post)
-                }
+            imgbLiked.setOnClickListener {
+                onInteractionListener.onLike(post)
+            }
 
             imgbShare.setOnClickListener {
                 onInteractionListener.onShare(post)
@@ -65,31 +70,30 @@ class PostViewHolder(
 
 
 
-                menu.setOnClickListener {
-                    PopupMenu(it.context, it).apply {
-                        inflate(R.menu.options_post)
-                        setOnMenuItemClickListener { item ->
-                            when (item.itemId) {
-                                R.id.remove -> {
-                                    onInteractionListener.onRemove(post)
-                                    true
-                                }
-
-                                R.id.edit -> {
-                                    onInteractionListener.onEdit(post)
-                                    true
-                                }
-
-                                else -> false
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
                             }
+
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+
+                            else -> false
                         }
-                    }.show()
-                }
+                    }
+                }.show()
             }
-
-
         }
 
+
+    }
 
 
     class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

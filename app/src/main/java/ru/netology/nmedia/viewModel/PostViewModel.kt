@@ -65,7 +65,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     override fun onSuccess(post: Post) {
                         _data.postValue(FeedModel())
                         _postCreated.postValue(Unit)
-
+                        loadPosts()
                     }
 
                 })

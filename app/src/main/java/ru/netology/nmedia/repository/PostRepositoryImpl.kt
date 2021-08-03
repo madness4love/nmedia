@@ -1,35 +1,12 @@
 package ru.netology.nmedia.repository
 
 
-import android.accounts.NetworkErrorException
-import android.net.Network
-import com.google.android.youtube.player.internal.i
-import com.google.android.youtube.player.internal.t
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dto.Post
-import java.io.IOException
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 import java.net.ConnectException
-import java.util.concurrent.TimeUnit
 
 class PostRepositoryImpl : PostRepository {
 
-    private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .build()
-    private val gson = Gson()
-    private val typeToken = object : TypeToken<List<Post>>() {}
-
-    companion object {
-        private const val BASE_URL = "http://10.0.2.2:9999"
-        private val jsonType = "application/json".toMediaType()
-    }
 
     override fun getAllAsync(callback: PostRepository.Callback<List<Post>>) {
         PostsApi.retrofitService.getAll().enqueue(object : retrofit2.Callback<List<Post>> {

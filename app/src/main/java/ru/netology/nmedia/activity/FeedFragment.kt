@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast.LENGTH_LONG
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -18,6 +20,7 @@ import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
+import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewModel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -64,26 +67,31 @@ class FeedFragment : Fragment() {
         })
 
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner, { state : FeedModel->
-            adapter.submitList(state.posts)
-            binding.progress.isVisible = state.loading
-            binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
-            binding.connectionLost.isVisible = state.connectionError
+        viewModel.data.observe(viewLifecycleOwner, { post : FeedModel->
+            adapter.submitList(post.posts)
+            binding.emptyText.isVisible = post.empty
         })
 
-        binding.retryButton.setOnClickListener {
-            viewModel.loadPosts()
+        viewModel.dataState.observe(viewLifecycleOwner, { state : FeedModelState->
+            binding.progress.isVisible = state.loading
+            binding.swiperefresh.isRefreshing = state.refreshing
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry_loading) { viewModel.loadPosts() }
+                    .show()
+            }
+
+        })
+
+
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.refreshPosts()
+            swiperefresh.isRefreshing = false
         }
 
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadPosts()
-            swipeRefresh.isRefreshing = false
-        }
 
 
-
-        binding.addPost.setOnClickListener{
+        binding.fab.setOnClickListener{
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
 

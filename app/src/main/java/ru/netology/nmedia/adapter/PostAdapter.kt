@@ -45,8 +45,8 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            imgbLiked.text = WallService.displayCount(post.likes)
-            imgbLiked.isChecked = post.likedByMe
+            like.text = WallService.displayCount(post.likes)
+            share.isChecked = post.likedByMe
 
             val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
 
@@ -59,11 +59,11 @@ class PostViewHolder(
 
 
 
-            imgbLiked.setOnClickListener {
+            like.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
 
-            imgbShare.setOnClickListener {
+            share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
 

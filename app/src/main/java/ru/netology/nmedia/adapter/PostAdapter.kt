@@ -46,7 +46,7 @@ class PostViewHolder(
             published.text = post.published
             content.text = post.content
             like.text = WallService.displayCount(post.likes)
-            share.isChecked = post.likedByMe
+            like.isChecked = post.likedByMe
 
             val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
 

@@ -24,7 +24,9 @@ private val empty = Post(
     content = "",
     author = "",
     published = "",
-    authorAvatar = ""
+    authorAvatar = "",
+    likedByMe = false,
+    likes = 0
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -33,8 +35,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
     private val _dataState = MutableLiveData<FeedModelState>()
-    val dataState :LiveData<FeedModelState>
-            get() = _dataState
+    val dataState: LiveData<FeedModelState>
+        get() = _dataState
 
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -51,7 +53,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(loading = true)
             repository.getAll()
             _dataState.value = FeedModelState()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
     }
@@ -61,45 +63,80 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
             _dataState.value = FeedModelState()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
     }
 
     fun save() {
-       edited.value?.let {
-           _postCreated.value = Unit
-           viewModelScope.launch {
-               try {
-                   repository.save(it)
-                   _dataState.value = FeedModelState()
-               } catch (e : Exception) {
-                   _dataState.value = FeedModelState(error = true)
-               }
-           }
-       }
+        edited.value?.let {
+            _postCreated.value = Unit
+            viewModelScope.launch {
+                try {
+                    repository.save(it)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
+        }
         edited.value = empty
 
     }
 
-    fun like(id : Long) = viewModelScope.launch{
-        val post = repository.getById(id)
+    fun like(id: Long) = viewModelScope.launch {
 
+//        val post : Post =
+//
+//        if (post.likedByMe) unlikeById(id) else likeById(id)
+//
 
     }
 
     fun likeById(id: Long) {
+        edited.value?.let {
+
+            _postCreated.value = Unit
+            viewModelScope.launch {
+                try {
+                    repository.likeById(id)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
+        }
+        edited.value = empty
 
     }
 
-    fun unlikeById(id : Long) {
+    fun unlikeById(id: Long) {
+        edited.value?.let {
+
+            _postCreated.value = Unit
+            viewModelScope.launch {
+                try {
+                    repository.unlikeById(id)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
+        }
+        edited.value = empty
 
     }
 
     fun removeById(id: Long) {
+        viewModelScope.launch {
+            try {
+                repository.removeById(id)
+            } catch (e: Exception) {
+                _dataState.value = FeedModelState(error = true)
 
+            }
+        }
     }
-
 
 
     fun edit(post: Post) {

@@ -20,13 +20,13 @@ interface PostDao {
     suspend fun insert(post: PostEntity)
 
     @Query("""
-                UPDATE PostEntity SET
-                    likes = likes + CASE WHEN likedByMe THEN -1 ELSE 1 END,
-                    likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
-                WHERE id = :id
-            """
-    )
+        UPDATE PostEntity SET
+        likes = likes + CASE WHEN likedByMe THEN -1 ELSE 1 END,
+        likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+        WHERE id = :id
+        """)
     suspend fun likeById(id: Long)
+
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getById(id: Long) : Post

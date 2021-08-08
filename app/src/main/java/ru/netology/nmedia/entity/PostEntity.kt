@@ -2,6 +2,7 @@ package ru.netology.nmedia.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.youtube.player.internal.d
 import ru.netology.nmedia.dto.Post
 
 @Entity
@@ -19,8 +20,8 @@ data class PostEntity(
         id,
         author,
         authorAvatar,
-        content,
         published,
+        content,
         likedByMe,
         likes
     )
@@ -31,8 +32,8 @@ data class PostEntity(
                 dto.id,
                 dto.author,
                 dto.authorAvatar,
-                dto.content,
                 dto.published,
+                dto.content,
                 dto.likedByMe,
                 dto.likes,
             )

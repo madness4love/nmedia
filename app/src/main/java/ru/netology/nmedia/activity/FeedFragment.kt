@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_feed.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
@@ -86,7 +85,8 @@ class FeedFragment : Fragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             viewModel.refreshPosts()
-            swiperefresh.isRefreshing = false
+            binding.swiperefresh.isRefreshing = false
+
         }
 
 

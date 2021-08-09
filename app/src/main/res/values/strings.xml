@@ -22,4 +22,5 @@
     <string name="empty_posts">no posts</string>
     <string name="retry_loading">Retry</string>
     <string name="error_loading">try again later</string>
+    <string name="connection_lost" translatable="false">connection is lost. please try again later</string>
 </resources>

@@ -84,15 +84,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun like(id: Long) = viewModelScope.launch {
-
-//        val post : Post =
-//
-//        if (post.likedByMe) unlikeById(id) else likeById(id)
-//
-
-    }
-
     fun likeById(id: Long) {
         edited.value?.let {
 

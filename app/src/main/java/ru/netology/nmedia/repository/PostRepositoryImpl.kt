@@ -3,7 +3,6 @@ package ru.netology.nmedia.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.google.android.gms.dynamic.IObjectWrapper
 import ru.netology.nmedia.ApiError
 import ru.netology.nmedia.NetworkError
 import ru.netology.nmedia.UnknownAppError
@@ -15,7 +14,6 @@ import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
 import java.io.IOException
 import java.lang.Exception
-import java.net.ConnectException
 
 class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
 

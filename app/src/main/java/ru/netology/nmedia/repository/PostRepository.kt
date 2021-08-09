@@ -1,10 +1,8 @@
 package ru.netology.nmedia.repository
 
 import androidx.lifecycle.LiveData
-import com.google.android.youtube.player.internal.k
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.util.SingleLiveEvent
-import java.lang.Exception
+
 
 
 interface PostRepository {

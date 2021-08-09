@@ -2,7 +2,6 @@ package ru.netology.nmedia.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.youtube.player.internal.d
 import ru.netology.nmedia.dto.Post
 
 @Entity

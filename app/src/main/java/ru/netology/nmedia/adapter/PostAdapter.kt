@@ -11,7 +11,6 @@ import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.WallService
 import ru.netology.nmedia.utils.GlideApp
-import ru.netology.nmedia.utils.MyAppGlideModule
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}

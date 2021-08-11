@@ -19,8 +19,8 @@ data class PostEntity(
         id,
         author,
         authorAvatar,
-        content,
         published,
+        content,
         likedByMe,
         likes
     )
@@ -31,10 +31,13 @@ data class PostEntity(
                 dto.id,
                 dto.author,
                 dto.authorAvatar,
-                dto.content,
                 dto.published,
+                dto.content,
                 dto.likedByMe,
                 dto.likes,
             )
     }
 }
+
+fun List<PostEntity>.toDto() : List<Post> = map(PostEntity::toDto)
+fun List<Post>.toEntity() : List<PostEntity> = map(PostEntity::fromDto)

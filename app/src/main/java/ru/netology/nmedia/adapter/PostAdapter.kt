@@ -6,13 +6,11 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.card_post.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.WallService
 import ru.netology.nmedia.utils.GlideApp
-import ru.netology.nmedia.utils.MyAppGlideModule
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -45,8 +43,8 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            imgbLiked.text = WallService.displayCount(post.likes)
-            imgbLiked.isChecked = post.likedByMe
+            like.text = WallService.displayCount(post.likes)
+            like.isChecked = post.likedByMe
 
             val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
 
@@ -59,11 +57,11 @@ class PostViewHolder(
 
 
 
-            imgbLiked.setOnClickListener {
+            like.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
 
-            imgbShare.setOnClickListener {
+            share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
 

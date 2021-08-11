@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -78,6 +79,25 @@ class FeedFragment : Fragment() {
             }
 
         })
+
+        binding.newerPostLoad.hide()
+
+        viewModel.newerPosts.observe(viewLifecycleOwner) { posts ->
+            val count = posts.size
+            if (count > 0L) {
+                binding.newerPostLoad.show()
+                binding.newerPostLoad.text = getString(R.string.have_new_posts, count.toString())
+            }
+        }
+
+
+        binding.newerPostLoad.setOnClickListener{
+            binding.newerPostLoad.hide()
+            binding.list.smoothScrollToPosition(0)
+                viewModel.readPosts()
+            }
+
+
 
 
         binding.swiperefresh.setOnRefreshListener {

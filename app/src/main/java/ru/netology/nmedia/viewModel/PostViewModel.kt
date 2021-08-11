@@ -1,12 +1,11 @@
 package ru.netology.nmedia.viewModel
 
 import android.app.Application
-import android.net.Network
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import ru.netology.nmedia.NetworkError
 import ru.netology.nmedia.db.AppDB
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -14,29 +13,42 @@ import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.io.IOException
 import java.lang.Exception
-import java.net.ConnectException
-import kotlin.concurrent.thread
 
 private val empty = Post(
     id = 0L,
-    content = "",
     author = "",
-    published = "",
     authorAvatar = "",
+    published = "",
+    content = "",
     likedByMe = false,
-    likes = 0
+    likes = 0,
+    isRead = false
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDB.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+    val data: LiveData<FeedModel> = repository.data
+        .map(::FeedModel)
+        .asLiveData(Dispatchers.Default)
+
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
+
+//    val newerCount : LiveData<Int> = data.switchMap {
+//        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
+//            .catch { e -> e.printStackTrace() }
+//            .asLiveData()
+//    }
+
+    val newerPosts : LiveData<List<Post>> = data.switchMap {
+        repository.getNewer(it.posts.firstOrNull()?.id ?: 0L)
+        .catch { e -> e.printStackTrace() }
+        .asLiveData()
+    }
 
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -82,6 +94,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
         edited.value = empty
 
+    }
+
+    fun readPosts() {
+        repository.readPosts()
     }
 
     fun likeById(id: Long) {

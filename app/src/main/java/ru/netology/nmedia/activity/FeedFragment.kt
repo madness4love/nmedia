@@ -82,12 +82,11 @@ class FeedFragment : Fragment() {
 
         binding.newerPostLoad.hide()
 
-        viewModel.newerPosts.observe(viewLifecycleOwner) { posts ->
-            val count = posts.size
-            if (count > 0L) {
+
+        viewModel.newerPosts.observe(viewLifecycleOwner) { count ->
                 binding.newerPostLoad.show()
-                binding.newerPostLoad.text = getString(R.string.have_new_posts, count.toString())
-            }
+                binding.newerPostLoad.text = getString(R.string.have_new_posts, count.size.toString())
+
         }
 
 

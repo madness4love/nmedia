@@ -45,7 +45,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
     val newerPosts : LiveData<List<Post>> = data.switchMap {
-        repository.getNewer(it.posts.firstOrNull()?.id ?: 0L)
+        repository.getNewer(repository.lastReadId)
         .catch { e -> e.printStackTrace() }
         .asLiveData()
     }
@@ -97,7 +97,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun readPosts() {
-        repository.readPosts()
+        repository.readPosts(newerPosts.asFlow())
     }
 
     fun likeById(id: Long) {

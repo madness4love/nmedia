@@ -23,10 +23,12 @@ import java.lang.Exception
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
+
     override val data: Flow<List<Post>> = dao.getAll()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
+    override var lastReadId : Long = 0L
 
     override suspend fun getAll() {
         try {
@@ -37,7 +39,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
-            readPosts()
+            readPosts(data)
+            lastReadId = body.last().id
 
         } catch (e: IOException) {
             throw NetworkError
@@ -125,10 +128,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
-            if (dao.countUnreadPosts() == body.size) {
-                val newPosts = dao.getNewer().toDto()
-                emit(newPosts)
-            }
+            val newPosts = dao.getNewer().toDto()
+            lastReadId = newPosts.last().id
+            emit(newPosts)
+
         }
     }
         .catch { e -> AppError.from(e) }
@@ -151,8 +154,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         .catch { e -> AppError.from(e) }
         .flowOn(Dispatchers.Default)
 
-    override fun readPosts() {
-        data.map {
+    override fun readPosts(posts : Flow<List<Post>>) {
+        posts.map {
             it.onEach { post ->
                 dao.readNewPost(post.id)
             }

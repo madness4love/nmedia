@@ -38,17 +38,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
-//    val newerCount : LiveData<Int> = data.switchMap {
-//        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
-//            .catch { e -> e.printStackTrace() }
-//            .asLiveData()
-//    }
-
-    val newerPosts : LiveData<List<Post>> = data.switchMap {
-        repository.getNewer(repository.lastReadId)
-        .catch { e -> e.printStackTrace() }
-        .asLiveData()
+    val newerCount : LiveData<Int> = data.switchMap {
+        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
+            .catch { e -> e.printStackTrace() }
+            .asLiveData()
     }
+
+//    val newerPosts : LiveData<List<Post>> = data.switchMap {
+//        repository.getNewer(repository.lastReadId)
+//        .catch { e -> e.printStackTrace() }
+//        .asLiveData()
+//    }
 
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -97,7 +97,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun readPosts() {
-        repository.readPosts(newerPosts.asFlow())
+        viewModelScope.launch {
+            repository.readPosts()
+        }
     }
 
     fun likeById(id: Long) {

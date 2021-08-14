@@ -6,7 +6,6 @@ import ru.netology.nmedia.dto.Post
 
 
 interface PostRepository {
-    var lastReadId : Long
     val data : Flow<List<Post>>
     suspend fun getAll()
     suspend fun getById (id : Long)
@@ -14,8 +13,7 @@ interface PostRepository {
     suspend fun unlikeById (id : Long)
     suspend fun save (post : Post)
     suspend fun removeById (id: Long)
-    fun getNewer(id: Long) : Flow<List<Post>>
     fun getNewerCount(id: Long) :Flow<Int>
-    fun readPosts(posts : Flow<List<Post>>)
+    suspend fun readPosts()
 
 }

@@ -34,13 +34,11 @@ interface PostDao {
     @Query("""
         UPDATE PostEntity SET
         isRead = 1
-        WHERE id = :id
         """)
-    suspend fun readNewPost(id : Long)
+    suspend fun readNewPost()
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity WHERE isRead = 0")
     suspend fun countUnreadPosts() : Int
-
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getById(id: Long) : Post

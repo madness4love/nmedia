@@ -28,7 +28,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
-    override var lastReadId : Long = 0L
 
     override suspend fun getAll() {
         try {
@@ -38,9 +37,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
-            readPosts(data)
-            lastReadId = body.last().id
+            dao.insert(body.toEntity(true))
 
         } catch (e: IOException) {
             throw NetworkError
@@ -118,25 +115,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
-    override fun getNewer(id: Long): Flow<List<Post>> = flow {
-        while (true) {
-            delay(10_000L)
-            val response = PostsApi.service.getNewer(id)
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
-            }
-
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
-            val newPosts = dao.getNewer().toDto()
-            lastReadId = newPosts.last().id
-            emit(newPosts)
-
-        }
-    }
-        .catch { e -> AppError.from(e) }
-        .flowOn(Dispatchers.Default)
-
 
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         while (true) {
@@ -147,19 +125,16 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
-            emit(body.size)
+            dao.insert(body.toEntity(false))
+            val newPosts = dao.getNewer()
+            emit(newPosts.size)
         }
     }
         .catch { e -> AppError.from(e) }
         .flowOn(Dispatchers.Default)
 
-    override fun readPosts(posts : Flow<List<Post>>) {
-        posts.map {
-            it.onEach { post ->
-                dao.readNewPost(post.id)
-            }
-        }
+    override suspend fun readPosts() {
+        dao.readNewPost()
 
     }
 

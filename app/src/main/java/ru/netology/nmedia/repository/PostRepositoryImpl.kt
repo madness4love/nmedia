@@ -33,7 +33,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity(true))
+            if (body.size > dao.countPosts()) {
+                val notInRoomPosts = body.takeLast(body.size - dao.countPosts())
+                dao.insert(notInRoomPosts.toEntity(true))
+            }
 
         } catch (e: IOException) {
             throw NetworkError
@@ -115,7 +118,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         while (true) {
             delay(10_000L)
-            val response = PostsApi.service.getNewerCount(id)
+            val response = PostsApi.service.getNewer(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }

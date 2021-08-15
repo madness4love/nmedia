@@ -79,6 +79,27 @@ class FeedFragment : Fragment() {
 
         })
 
+        binding.newerPostLoad.hide()
+
+
+        viewModel.newerCount.observe(viewLifecycleOwner) { count ->
+            if (count > 0) {
+                binding.newerPostLoad.show()
+                binding.newerPostLoad.text =
+                    getString(R.string.have_new_posts, count.toString())
+            }
+
+        }
+
+
+        binding.newerPostLoad.setOnClickListener{
+            binding.newerPostLoad.hide()
+            binding.list.smoothScrollToPosition(0)
+                viewModel.readPosts()
+            }
+
+
+
 
         binding.swiperefresh.setOnRefreshListener {
             viewModel.refreshPosts()

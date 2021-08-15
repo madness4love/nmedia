@@ -5,13 +5,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-    fun getAll(): LiveData<List<PostEntity>>
+    fun getAll(): Flow<List<PostEntity>>
+
+    @Query("SELECT * FROM PostEntity WHERE isRead = 0 ORDER BY id DESC")
+    fun getNewer(): List<PostEntity>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty() : Boolean
@@ -27,6 +31,14 @@ interface PostDao {
         """)
     suspend fun likeById(id: Long)
 
+    @Query("""
+        UPDATE PostEntity SET
+        isRead = 1
+        """)
+    suspend fun readNewPost()
+
+    @Query("SELECT COUNT(*) FROM PostEntity")
+    suspend fun countPosts() : Int
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getById(id: Long) : Post

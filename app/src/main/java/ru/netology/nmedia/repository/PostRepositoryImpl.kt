@@ -1,9 +1,11 @@
 package ru.netology.nmedia.repository
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import ru.netology.nmedia.ApiError
+import ru.netology.nmedia.AppError
 import ru.netology.nmedia.NetworkError
 import ru.netology.nmedia.UnknownAppError
 import ru.netology.nmedia.api.PostsApi
@@ -15,9 +17,12 @@ import ru.netology.nmedia.entity.toEntity
 import java.io.IOException
 import java.lang.Exception
 
-class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
+class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
-    override val data: LiveData<List<Post>> = dao.getAll().map(List<PostEntity>::toDto)
+
+    override val data: Flow<List<Post>> = dao.getAll()
+        .map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
 
 
     override suspend fun getAll() {
@@ -28,17 +33,24 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
-        } catch (e : IOException) {
+            if (dao.isEmpty()) {
+                dao.insert(body.toEntity(false))
+                dao.readNewPost()
+            }
+            if (body.size > dao.countPosts()) {
+                val notInRoomPosts = body.takeLast(body.size - dao.countPosts())
+                dao.insert(notInRoomPosts.toEntity(true))
+            }
+
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
     }
 
 
-
-    override suspend fun save (post : Post) {
+    override suspend fun save(post: Post) {
         try {
             val response = PostsApi.service.save(post)
             if (!response.isSuccessful) {
@@ -47,9 +59,9 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body))
-        } catch (e : IOException) {
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
     }
@@ -66,9 +78,9 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body))
 
-        } catch (e : IOException) {
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
     }
@@ -83,9 +95,9 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body))
 
-        } catch (e : IOException) {
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
     }
@@ -99,11 +111,34 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
             }
 
             dao.removeById(id)
-        } catch (e : IOException) {
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
+    }
+
+
+    override fun getNewerCount(id: Long): Flow<Int> = flow {
+        while (true) {
+            delay(10_000L)
+            val response = PostsApi.service.getNewer(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            dao.insert(body.toEntity(false))
+            val newPosts = dao.getNewer()
+            emit(newPosts.size)
+        }
+    }
+        .catch { e -> AppError.from(e) }
+        .flowOn(Dispatchers.Default)
+
+    override suspend fun readPosts() {
+        dao.readNewPost()
+
     }
 
     override suspend fun getById(id: Long) {
@@ -115,9 +150,9 @@ class PostRepositoryImpl(private val dao : PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.getById(body.id)
-        } catch (e : IOException) {
+        } catch (e: IOException) {
             throw NetworkError
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             throw UnknownAppError
         }
     }

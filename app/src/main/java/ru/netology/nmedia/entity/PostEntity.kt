@@ -14,6 +14,7 @@ data class PostEntity(
     val content: String,
     val likedByMe: Boolean = false,
     val likes: Int = 0,
+    var isRead : Boolean = false
 ) {
     fun toDto() = Post(
         id,
@@ -22,7 +23,8 @@ data class PostEntity(
         published,
         content,
         likedByMe,
-        likes
+        likes,
+        isRead
     )
 
     companion object {
@@ -35,9 +37,10 @@ data class PostEntity(
                 dto.content,
                 dto.likedByMe,
                 dto.likes,
+                dto.isRead
             )
     }
 }
 
 fun List<PostEntity>.toDto() : List<Post> = map(PostEntity::toDto)
-fun List<Post>.toEntity() : List<PostEntity> = map(PostEntity::fromDto)
+fun List<Post>.toEntity(isRead : Boolean) : List<PostEntity> = map(PostEntity::fromDto)

@@ -33,6 +33,9 @@ interface PostsApiService {
     @GET("posts")
     suspend fun getAll() : Response<List<Post>>
 
+    @GET("posts/{id}/newer")
+    suspend fun getNewerCount(@Path("id") id : Long) : Response<List<Post>>
+
     @POST("posts")
     suspend fun save(@Body post: Post) : Response<Post>
 
@@ -48,7 +51,8 @@ interface PostsApiService {
     @DELETE("posts/{id}/likes")
     suspend fun unlikeById(@Path("id") id : Long) : Response<Post>
 
-
+    @GET("posts/{id}/newer")
+    suspend fun getNewer(@Path("id") id: Long): Response<List<Post>>
 }
 
 object PostsApi {

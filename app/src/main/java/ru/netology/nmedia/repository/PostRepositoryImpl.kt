@@ -33,6 +33,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
+            if (dao.isEmpty()) {
+                dao.insert(body.toEntity(false))
+                dao.readNewPost()
+            }
             if (body.size > dao.countPosts()) {
                 val notInRoomPosts = body.takeLast(body.size - dao.countPosts())
                 dao.insert(notInRoomPosts.toEntity(true))

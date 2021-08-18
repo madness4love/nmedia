@@ -28,6 +28,4 @@
     <string name="remove" translatable="false">Remove</string>
     <string name="menu_save" translatable="false">Save</string>
     <string name="menu_cancel" translatable="false">Cancel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
